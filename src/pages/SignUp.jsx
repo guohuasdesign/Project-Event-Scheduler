@@ -44,14 +44,16 @@ const SignUp = () => {
       <div className="flex flex-col h-full w-full items-center mt-[100px] gap-[1rem]">
         <div className="flex flex-col items-left justify-center">
           <input
-            className="input validator border-black text-black w-[20rem]"
+            className="input border-black text-black w-[20rem]"
             type="email"
             name="email"
             value={email}
             onChange={handleChange}
-            required
             placeholder="Email"
           />
+          {state.error?.email && (
+            <p className="text-red-500 text-sm mt-1">{state.error?.email}</p>
+          )}
         </div>
         <div className="flex flex-col items-left justify-center">
           <input
@@ -59,13 +61,12 @@ const SignUp = () => {
             name="password"
             value={password}
             onChange={handleChange}
-            className="input validator border-black text-black mt-2 w-[20rem]"
-            required
+            className="input border-black text-black mt-2 w-[20rem]"
             placeholder="Password"
-            minlength="8"
-            // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
           />
+          {state.error?.password && (
+            <p className="text-red-500 text-sm mt-1">{state.error?.password}</p>
+          )}
         </div>
         <button className="btn btn-neutral" disabled={isPending}>
           Sign Up

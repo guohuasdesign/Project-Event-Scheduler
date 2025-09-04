@@ -17,11 +17,11 @@ const SignIn = () => {
       return { error: validationErrors, success: false };
     }
     try {
-      toast.success("Welcome back");
       const signInRes = await signIn({ email, password });
 
       console.log(signInRes);
       handleSignIn(signInRes.token);
+      toast.success("Welcome back");
 
       return { error: null, success: true };
     } catch (error) {
@@ -50,39 +50,32 @@ const SignIn = () => {
       <div className="flex flex-col h-full w-full items-center mt-[100px] gap-[1rem]">
         <div className="flex flex-col items-left justify-center">
           <input
-            className="input validator border-black text-black w-[20rem]"
+            className="input border-black text-black w-[20rem]"
             type="email"
             name="email"
             value={email}
             onChange={handleChange}
-            required
             placeholder="Email"
           />
-          <div className="validator-hint hidden">Enter valid email address</div>
+          {state.error?.email && (
+            <p className="text-red-500 text-sm mt-1">{state.error?.email}</p>
+          )}
         </div>
+
         <div className="flex flex-col items-left justify-center">
           <input
             type="password"
             name="password"
             value={password}
-            className="input validator border-black text-black mt-2 w-[20rem]"
-            required
+            className="input border-black text-black mt-2 w-[20rem]"
             onChange={handleChange}
             placeholder="Password"
-            minlength="8"
-            // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
           />
-          {/* <p className="validator-hint hidden">
-          Must be more than 8 characters, including
-          <br />
-          At least one number
-          <br />
-          At least one lowercase letter
-          <br />
-          At least one uppercase letter
-        </p> */}
+          {state.error?.password && (
+            <p className="text-red-500 text-sm mt-1">{state.error?.password}</p>
+          )}
         </div>
+
         <p className="text-black text-[0.8rem]">
           Don't have an account?
           <Link to="/signup" className="text-blue-400 font-bold">

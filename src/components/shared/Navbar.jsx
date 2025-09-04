@@ -16,6 +16,11 @@ const Navbar = () => {
           {signedIn ? (
             <>
               <li>
+                <button className="btn btn-accent mr-3">
+                  <Link to="createEvent">Create Event</Link>
+                </button>
+              </li>
+              <li>
                 <button className="btn btn-primary" onClick={handleSignOut}>
                   Sign Out
                 </button>

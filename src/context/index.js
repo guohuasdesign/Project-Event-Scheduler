@@ -1,5 +1,14 @@
 import { createContext, use } from "react";
 import AuthProvider from "./AuthProvider";
+import EventProvider from "./EventProvider";
+const EventContext = createContext();
+
+const useEvents = () => {
+  const context = use(EventContext);
+  if (!context) throw new Error("useDucks must be used within a DuckContext");
+  return context;
+};
+
 const AuthContext = createContext();
 
 const useAuth = () => {
@@ -9,4 +18,11 @@ const useAuth = () => {
   return context;
 };
 
-export { AuthProvider, AuthContext, useAuth };
+export {
+  AuthProvider,
+  AuthContext,
+  useAuth,
+  EventProvider,
+  EventContext,
+  useEvents,
+};

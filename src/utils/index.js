@@ -23,6 +23,22 @@ const validateSignUp = ({ email, password }) => {
   return newErrors;
 };
 
+const validateCreateEventForm = ({ title, description, date, location }) => {
+  const newErrors = {};
+
+  if (!title.trim()) newErrors.title = "Title is required";
+
+  if (!description.trim()) {
+    newErrors.description = "Description is required";
+  }
+
+  if (!date) newErrors.date = "Date is required";
+
+  if (!location.trim()) newErrors.location = "Location is required";
+
+  return newErrors;
+};
+
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
-export { validateSignIn, validateSignUp, sleep };
+export { validateSignIn, validateSignUp, sleep, validateCreateEventForm };

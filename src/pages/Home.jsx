@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [location, setLocation] = useState("");
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   // load all existing events
   useEffect(() => {
@@ -15,9 +13,17 @@ const Home = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/events");
+      const response = await fetch("http://localhost:3001/api/events?page=1&limit=16");
       const data = await response.json();
-      setEvents(data.results || []);
+
+
+      if (Array.isArray(data)) {
+        setEvents(data);
+      } else if (data.results) {
+        setEvents(data.results);
+      } else {
+        setEvents([]);
+      }
     } catch (err) {
       console.error("Error fetching events:", err);
     } finally {
@@ -25,137 +31,100 @@ const Home = () => {
     }
   };
 
-  // submit a new event
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  //to know the categorie of events belong to design or tech or mischung;
+  const getCategory = (event) => {
+    if (event.title.toLowerCase().includes("ux") || event.title.toLowerCase().includes("design") || event.title.toLowerCase().includes("figma")) {
+      return "design";
+    }
+    if (event.title.toLowerCase().includes("coding") || event.title.toLowerCase().includes("code") || event.title.toLowerCase().includes("design ops")) {
+      return "tech";
+    }
+    return "general";
+  };
 
-    const isoDate = new Date(date).toISOString();
-    const latitude = 49.01438194665317;
-    const longitude = 8.404746955649602;
-
-    try {
-      const response = await fetch("http://localhost:3001/api/events", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          description,
-          date: isoDate,
-          location,
-          latitude,
-          longitude,
-        }),
-      });
-
-      if (response.ok) {
-        const newEvent = await response.json();
-        alert("Event created successfully!");
-
-        // update event list immediately
-        setEvents((prev) => [newEvent, ...prev]);
-
-        // reset form
-        setTitle("");
-        setDescription("");
-        setDate("");
-        setLocation("");
-      } else {
-        alert("Failed to create event.");
-      }
-    } catch (err) {
-      console.error("Error creating event:", err);
-      alert("Error connecting to API.");
+  //different colors of different categories: design is pink; tech is blue; mischung is green;
+  const getCategoryStyle = (category) => {
+    switch (category) {
+      case "design":
+        return "bg-pink-100 border-pink-200";
+      case "tech":
+        return "bg-blue-100 border-blue-200";
+      default:
+        return "bg-green-100 border-green-200";
     }
   };
 
+
   return (
     <div className="p-6 space-y-10">
-      {/* Event Form */}
-      <div>
-        <h1 className="text-2xl font-bold mb-6 flex justify-center">
-          Create a new Event
-        </h1>
-        <form
-          onSubmit={handleSubmit}
-          className="flex justify-center items-center max-w-lg mx-auto"
-        >
-          <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4">
-            <legend className="fieldset-legend text-lg font-semibold">
-              Event details
-            </legend>
 
-            <label className="fieldset-label">Event Title</label>
-            <input
-              type="text"
-              placeholder="Event Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="input input-bordered w-full"
-              required
-            />
-
-            <label className="fieldset-label">Description</label>
-            <textarea
-              placeholder="Event Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="textarea textarea-bordered w-full"
-              required
-            />
-
-            <label className="fieldset-label">Date</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="input input-bordered w-full"
-              required
-            />
-
-            <label className="fieldset-label">Location</label>
-            <input
-              type="text"
-              placeholder="Event Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="input input-bordered w-full"
-              required
-            />
-
-            <button
-              type="submit"
-              className="btn btn-neutral btn-outline mt-4 rounded-xl"
-            >
-              Add Event
-            </button>
-          </fieldset>
-        </form>
-      </div>
-
+      <h2 className="text-2xl font-bold mb-6 text-blue-600">Our Product Event Series 2026 </h2>
       {/* Event List */}
-      <div>
-        <h2 className="text-xl font-semibold mb-4">Our Event List</h2>
-        {loading ? (
-          <p>Loading events...</p>
-        ) : events.length === 0 ? (
-          <p>No events available.</p>
-        ) : (
-          <div className="grid gap-4">
-            {events.map((event) => (
-              <div key={event.id} className="card bg-base-200 shadow p-4">
-                <h3 className="text-lg font-bold">{event.title}</h3>
-                <p className="text-sm text-gray-500">
-                  {new Date(event.date).toLocaleString()}
+      {loading ? (
+        <p>Loading events...</p>
+      ) : events.length === 0 ? (
+        <p>No events available.</p>
+      ) : (
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {events.slice(0, showAll ? events.length : 11).map((event) => (
+            // click then change to EventDetail
+            <Link
+              key={event._id || event.id}
+              to={`/eventDetail/${event._id || event.id}`}
+              className="bg-base-200 shadow-sm rounded-xl hover:shadow-lg transition cursor-pointer">
+
+              <div className={`card-xs p-4 h-fu1l rounded-lg ${getCategoryStyle(getCategory(event))}`}>
+
+                <h3 className="text-md font-mono text-gray-900 line-clamp-1"><span className="">Event Serie: </span>{event.title || event.name}</h3>
+                <p className="text-xs font-mono text-gray-500 mt-4">
+                  Time: {event.date
+                    ? new Date(event.date).toLocaleString()
+                    : "No date provided"}
                 </p>
-                <p>{event.description}</p>
-                <p className="text-sm text-gray-600">📍 {event.location}</p>
+                <p className="text-xs font-mono text-gray-500 mt-2 line-clamp-1">
+                  Place: {event.location || "Unknown location"}
+                </p>
+
+                <p className="text-xs font-mono text-gray-500 mt-2 line-clamp-1">
+                  Description: {event.description || event.details}
+                </p>
+
+                <div className="mt-6 flex justify-end">
+
+                  <button className="btn btn-neutral btn-outline">
+                    Know more
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <g clip-path="url(#clip0_6_13425)">
+                        <path d="M5.87988 4.12L13.7599 12L5.87988 19.88L7.99988 22L17.9999 12L7.99988 2L5.87988 4.12Z" fill="currentColor" />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_6_13425">
+                          <rect width="24" height="24" fill="white" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </button>
+
+                </div>
+
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </Link>
+
+          ))}
+
+          {/* more Event lists */}
+          {events.length > 11 && !showAll && (
+            <div className="card bg-gradient-to-r from-pink-200 to-green-200 shadow flex items-center justify-center cursor-pointer hover:bg-base-200 transition"
+              onClick={() => setShowAll(true)}>
+              <span className="text-2xl text-blue-400 *:font-semibold">Want more Events?</span>
+            </div>
+          )}
+
+        </div>
+      )}
     </div>
   );
 };
 
 export default Home;
+

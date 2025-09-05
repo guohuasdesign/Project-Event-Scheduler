@@ -1,3 +1,4 @@
 import Navbar from "./shared/Navbar";
 import Footer from "./shared/Footer";
-export { Navbar, Footer };
+import MyEvent from "./shared/MyEvent";
+export { Navbar, Footer, MyEvent };

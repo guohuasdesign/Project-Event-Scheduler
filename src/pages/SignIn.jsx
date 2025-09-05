@@ -41,13 +41,14 @@ const SignIn = () => {
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  if (signedIn) return <Navigate to="/" />;
+  if (signedIn) return <Navigate to="/events" />;
   return (
     <form
       className="my-5 md:w-1/2 mx-auto flex flex-col gap-3 items-center"
       action={formAction}
     >
-      <div className="flex flex-col h-full w-full items-center mt-[100px] gap-[1rem]">
+      <div className="flex flex-col h-full w-full items-center mt-[60px] gap-[1rem]">
+        <div className="text-black font-semibold text-2xl mb-2">Sign In</div>
         <div className="flex flex-col items-left justify-center">
           <input
             className="input border-black text-black w-[20rem]"
@@ -78,7 +79,7 @@ const SignIn = () => {
 
         <p className="text-black text-[0.8rem]">
           Don't have an account?
-          <Link to="/signup" className="text-blue-400 font-bold">
+          <Link to="/signup" className="text-black text-[0.9rem] font-bold">
             &nbsp;Sign Up
           </Link>
         </p>

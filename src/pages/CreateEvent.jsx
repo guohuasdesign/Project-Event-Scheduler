@@ -5,6 +5,8 @@ import { useEvents } from "../context";
 import { sleep, validateCreateEventForm } from "../utils";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CreateEvent = () => {
   const { setEvents } = useEvents();
@@ -36,7 +38,6 @@ const CreateEvent = () => {
 
       console.log(newEventData);
       const newEvent = await createEvent(newEventData);
-      // setEvents((prev) => [...prev, newEvent]);
       setForm({
         title: "",
         description: "",
@@ -46,7 +47,7 @@ const CreateEvent = () => {
         longitude: "49.01438194665317",
       });
       toast.success("There's a new event in your pond!");
-      navigate("/", { replace: true });
+      navigate("/events", { replace: true });
       return { error: null, success: true };
     } catch (error) {
       toast.error(error.message || "Something went wrong");
@@ -69,15 +70,25 @@ const CreateEvent = () => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleDateChange = (date) => {
+    setForm((prev) => ({
+      ...prev,
+      date: date ? date.toISOString() : "",
+    }));
+  };
+
   return (
     <form
       action={formAction}
       className="my-5 md:w-1/2 mx-auto flex flex-col gap-3 items-center"
     >
-      <div className="flex flex-col h-full w-full items-center mt-[100px] gap-[1rem]">
+      <div className="flex flex-col h-full w-full items-center mt-[60px] gap-[1rem]">
+        <div className="text-black font-semibold text-2xl mb-2">
+          Create New Event
+        </div>
         <div className="flex flex-col items-left justify-center">
           <input
-            className="input border-black text-black w-[30rem]"
+            className="input border-black text-black w-[25rem]"
             type="text"
             name="title"
             value={title}
@@ -88,9 +99,10 @@ const CreateEvent = () => {
             <p className="text-red-500 text-sm mt-1">{state.error?.title}</p>
           )}
         </div>
+
         <div className="flex flex-col items-left justify-center">
           <input
-            className="input border-black text-black w-[30rem]"
+            className="input border-black text-black w-[25rem]"
             type="text"
             name="description"
             value={description}
@@ -104,20 +116,39 @@ const CreateEvent = () => {
           )}
         </div>
         <div className="flex flex-col items-left justify-center">
-          <input
-            className="input border-black text-black w-[30rem]"
-            type="datetime-local"
-            name="date"
-            value={date}
-            onChange={handleChange}
-          />
+          <div className="relative w-[25rem]">
+            <DatePicker
+              className="input border-black text-black w-[25rem] pr-10"
+              selected={date ? new Date(date) : null}
+              onChange={handleDateChange}
+              name="date"
+              showTimeSelect
+              dateFormat="yyyy-MM-dd HH:mm"
+              placeholderText="Select date and time"
+              autoComplete="off"
+            />
+            <svg
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5 pointer-events-none"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
           {state.error?.date && (
             <p className="text-red-500 text-sm mt-1">{state.error?.date}</p>
           )}
         </div>
         <div className="flex flex-col items-left justify-center">
           <input
-            className="input border-black text-black w-[30rem]"
+            className="input border-black text-black w-[25rem]"
             type="text"
             name="location"
             value={location}
@@ -128,11 +159,7 @@ const CreateEvent = () => {
             <p className="text-red-500 text-sm mt-1">{state.error?.location}</p>
           )}
         </div>
-        <button
-          type="submit"
-          className="btn btn-neutral w-[30rem]"
-          disabled={isPending}
-        >
+        <button type="submit" className="btn btn-neutral" disabled={isPending}>
           {isPending ? (
             <>
               Adding event... <span className="loading loading-spinner"></span>

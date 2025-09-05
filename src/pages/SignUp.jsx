@@ -2,6 +2,7 @@ import { signUp } from "../data";
 import { validateSignUp } from "../utils";
 import { useNavigate } from "react-router-dom";
 import { useActionState, useState } from "react";
+import { Link } from "react-router";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -41,7 +42,9 @@ const SignUp = () => {
       className="my-5 md:w-1/2 mx-auto flex flex-col gap-3 items-center"
       action={formAction}
     >
-      <div className="flex flex-col h-full w-full items-center mt-[100px] gap-[1rem]">
+      <div className="flex flex-col h-full w-full items-center mt-[60px] gap-[1rem]">
+        <div className="text-black font-semibold text-2xl mb-2">Sign Up</div>
+
         <div className="flex flex-col items-left justify-center">
           <input
             className="input border-black text-black w-[20rem]"
@@ -68,6 +71,12 @@ const SignUp = () => {
             <p className="text-red-500 text-sm mt-1">{state.error?.password}</p>
           )}
         </div>
+        <p className="text-black text-[0.8rem]">
+          Already have an account?
+          <Link to="/signin" className="text-black text-[0.9rem] font-bold">
+            &nbsp;Sign In
+          </Link>
+        </p>
         <button className="btn btn-neutral" disabled={isPending}>
           Sign Up
         </button>

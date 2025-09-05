@@ -17,7 +17,7 @@ const Navbar = () => {
             <>
               <li>
                 <button className="btn btn-accent mr-3">
-                  <Link to="createEvent">Create Event</Link>
+                  <Link to="events/createEvent">Create Event</Link>
                 </button>
               </li>
               <li>

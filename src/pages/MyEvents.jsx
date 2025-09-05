@@ -1,6 +1,7 @@
+import React from "react";
 import { MyEvent } from "../components";
 
-const Home = () => {
+const MyEvents = () => {
   return (
     <>
       <MyEvent />
@@ -8,4 +9,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default MyEvents;

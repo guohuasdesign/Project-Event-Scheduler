@@ -15,20 +15,22 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">
           {signedIn ? (
             <>
+              {location.pathname !== "/events/createEvent" && (
+                <li>
+                  <button className="btn mr-3">
+                    <Link to="events/createEvent">Create Event</Link>
+                  </button>
+                </li>
+              )}
               <li>
-                <button className="btn btn-accent mr-3">
-                  <Link to="events/createEvent">Create Event</Link>
-                </button>
-              </li>
-              <li>
-                <button className="btn btn-primary" onClick={handleSignOut}>
+                <button className="btn" onClick={handleSignOut}>
                   Sign Out
                 </button>
               </li>
             </>
           ) : (
             <li>
-              <Link className="btn btn-primary" to="/signin">
+              <Link className="btn" to="/signin">
                 Sign In
               </Link>
             </li>

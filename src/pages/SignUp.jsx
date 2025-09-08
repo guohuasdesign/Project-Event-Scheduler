@@ -3,6 +3,7 @@ import { validateSignUp } from "../utils";
 import { useNavigate } from "react-router-dom";
 import { useActionState, useState } from "react";
 import { Link } from "react-router";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const navigate = useNavigate();

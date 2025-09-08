@@ -15,7 +15,9 @@ const MyEvent = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/events?page=1&limit=16");
+      const response = await fetch(
+        "http://localhost:3001/api/events?page=1&limit=16"
+      );
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
       setEvents(Array.isArray(data) ? data : data.results ?? []);
@@ -29,16 +31,21 @@ const MyEvent = () => {
 
   const getCategory = (event) => {
     const t = (event.title || "").toLowerCase();
-    if (t.includes("ux") || t.includes("design") || t.includes("figma")) return "design";
-    if (t.includes("coding") || t.includes("code") || t.includes("design ops")) return "tech";
+    if (t.includes("ux") || t.includes("design") || t.includes("figma"))
+      return "design";
+    if (t.includes("coding") || t.includes("code") || t.includes("design ops"))
+      return "tech";
     return "general";
   };
 
   const getCategoryStyle = (category) => {
     switch (category) {
-      case "design": return "bg-pink-100 border-pink-200";
-      case "tech":   return "bg-blue-100 border-blue-200";
-      default:       return "bg-green-100 border-green-200";
+      case "design":
+        return "bg-pink-100 border-pink-200";
+      case "tech":
+        return "bg-blue-100 border-blue-200";
+      default:
+        return "bg-green-100 border-green-200";
     }
   };
 
@@ -47,7 +54,7 @@ const MyEvent = () => {
     if (!confirm("Delete this event?")) return;
 
     try {
-      const token = localStorage.getItem("token");        // 从 localStorage 取 token
+      const token = localStorage.getItem("token"); // 从 localStorage 取 token
       const response = await fetch(`http://localhost:3001/api/events/${id}`, {
         method: "DELETE",
         headers: {
@@ -101,7 +108,7 @@ const MyEvent = () => {
                       aria-label="Delete"
                       title="Delete"
                       onClick={(e) => {
-                        e.preventDefault();     // 阻止外层 <Link> 导航
+                        e.preventDefault(); // 阻止外层 <Link> 导航
                         e.stopPropagation();
                         handleDelete(id);
                       }}
@@ -140,7 +147,8 @@ const MyEvent = () => {
                         viewBox="0 0 24 24"
                         fill="none"
                       >
-                        <g clipPath="url(#clip0)">{/* 注意是 clipPath */}
+                        <g clipPath="url(#clip0)">
+                          {/* 注意是 clipPath */}
                           <path
                             d="M5.87988 4.12L13.7599 12L5.87988 19.88L7.99988 22L17.9999 12L7.99988 2L5.87988 4.12Z"
                             fill="currentColor"

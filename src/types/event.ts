@@ -13,3 +13,13 @@ export interface EventItem {
     name?: string;
     details?: string;
 }
+
+export interface NewEventInput {
+    title: string;
+    description: string;
+    date: string;
+    location: string;
+    latitude: string;   // from your initial state
+    longitude: string;  // from your initial state
+  }
+  
